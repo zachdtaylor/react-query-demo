@@ -1,11 +1,11 @@
 import React from "react";
-import { useCreateTodo } from "../utils/todos";
+import { useCreatePerson } from "../utils/people";
 import "twin.macro";
 
-function useTodoForm() {
+function usePersonForm() {
   const initialState = {
     name: "",
-    description: "",
+    phoneNumber: "",
   };
   return React.useReducer(
     (o, n) => (n ? { ...o, ...n } : initialState),
@@ -23,15 +23,15 @@ function Input(props) {
   );
 }
 
-function TodoForm() {
-  const [todoForm, setTodoForm] = useTodoForm();
-  const createTodo = useCreateTodo();
+function PersonForm() {
+  const [personForm, setPersonForm] = usePersonForm();
+  const createPerson = useCreatePerson();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createTodo.mutate(todoForm, {
+    createPerson.mutate(personForm, {
       onSuccess: () => {
-        setTodoForm();
+        setPersonForm();
       },
     });
   };
@@ -41,21 +41,21 @@ function TodoForm() {
         <label htmlFor="name">Name</label>
         <Input
           name="name"
-          value={todoForm.name}
-          onChange={(e) => setTodoForm({ name: e.target.value })}
+          value={personForm.name}
+          onChange={(e) => setPersonForm({ name: e.target.value })}
         />
       </div>
       <div tw="my-4">
-        <label htmlFor="description">Description</label>
+        <label htmlFor="phoneNumber">Phone Number</label>
         <Input
-          name="description"
-          value={todoForm.description}
-          onChange={(e) => setTodoForm({ description: e.target.value })}
+          name="phoneNumber"
+          value={personForm.phoneNumber}
+          onChange={(e) => setPersonForm({ phoneNumber: e.target.value })}
         />
       </div>
-      <input type="submit" value="Create Todo" tw="px-4 py-2 rounded-md" />
+      <input type="submit" value="Create Person" tw="px-4 py-2 rounded-md" />
     </form>
   );
 }
 
-export { TodoForm };
+export { PersonForm };

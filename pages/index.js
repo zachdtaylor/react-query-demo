@@ -1,10 +1,11 @@
 import "twin.macro";
 import Head from "next/head";
-import { TodoForm } from "../components/lib";
-import { useTodos } from "../utils/todos";
+import Link from "next/link";
+import { PersonForm } from "../components/lib";
+import { usePeople } from "../utils/people";
 
 export default function Home() {
-  const todos = useTodos();
+  const people = usePeople();
   return (
     <div>
       <Head>
@@ -13,8 +14,13 @@ export default function Home() {
       </Head>
 
       <main tw="m-4">
-        {todos && todos.map((todo) => <p key={todo.id}>{todo.name}</p>)}
-        <TodoForm />
+        {people &&
+          people.map((person) => (
+            <Link key={person._id} href={`/person/${person._id}`}>
+              <a>{person.name}</a>
+            </Link>
+          ))}
+        <PersonForm />
       </main>
     </div>
   );
