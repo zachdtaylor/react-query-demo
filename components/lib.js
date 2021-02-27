@@ -96,15 +96,19 @@ function PersonForm() {
 
 const PeopleCount = () => {
   const people = usePeople();
-  return <div tw="my-4">There are {people.length} people</div>;
+  return (
+    <div tw="my-4">
+      There are {people.isLoading ? "?" : people.data.length} people
+    </div>
+  );
 };
 
 const PersonList = () => {
   const people = usePeople();
   return (
     <div tw="grid grid-flow-row grid-cols-5 gap-4">
-      {people &&
-        people.map((person) => (
+      {people.isSuccess &&
+        people.data.map((person) => (
           <Link key={person._id} href={`/person/${person._id}`}>
             <a tw="cursor-pointer">{person.name}</a>
           </Link>

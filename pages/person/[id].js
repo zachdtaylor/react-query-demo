@@ -17,10 +17,10 @@ export default function Person() {
 
   return (
     <Layout>
-      <PageInfo title={`Person Details - ${person.name} | Demo`} />
+      <PageInfo title={`Person Details - ${person.data.name} | Demo`} />
       <div tw="my-4">
-        <p>Name: {person.name}</p>
-        <p>Phone: {person.phoneNumber}</p>
+        <p>Name: {person.data.name}</p>
+        <p>Phone: {person.data.phoneNumber}</p>
       </div>
       <button
         tw="px-4 py-2 bg-red-600 text-white rounded-md"

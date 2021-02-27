@@ -2,15 +2,16 @@ import { useMutation, useQuery, useQueryClient } from "react-query";
 import { client } from "./api-client";
 
 function usePeople() {
-  const { data } = useQuery("people", () => client("/api/people"));
-  return data ?? [];
+  return useQuery("person", () => client("/api/people"), {
+    placeholderData: [{ id: 1, name: "Loading..." }],
+  });
 }
 
 function useCreatePerson() {
   const queryClient = useQueryClient();
   return useMutation((data) => client("/api/people", { data }), {
     onSuccess: () => {
-      queryClient.invalidateQueries("people");
+      queryClient.invalidateQueries("person");
     },
   });
 }
@@ -21,7 +22,7 @@ function useDeletePerson() {
     (id) => client(`/api/people/${id}`, { method: "DELETE" }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries("people");
+        queryClient.invalidateQueries("person");
       },
     }
   );
@@ -33,8 +34,9 @@ const loadingPerson = {
   phoneNumber: "Loading...",
 };
 function usePerson(id) {
-  const { data } = useQuery(["person", id], () => client(`/api/people/${id}`));
-  return data || loadingPerson;
+  return useQuery(["person", id], () => client(`/api/people/${id}`), {
+    placeholderData: loadingPerson,
+  });
 }
 
 export { usePeople, useCreatePerson, useDeletePerson, usePerson };
