@@ -3,7 +3,7 @@ import { client } from "./api-client";
 
 function usePeople() {
   const { data } = useQuery("people", () => client("/api/people"));
-  return data;
+  return data ?? [];
 }
 
 function useCreatePerson() {
@@ -13,6 +13,18 @@ function useCreatePerson() {
       queryClient.invalidateQueries("people");
     },
   });
+}
+
+function useDeletePerson() {
+  const queryClient = useQueryClient();
+  return useMutation(
+    (id) => client(`/api/people/${id}`, { method: "DELETE" }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("people");
+      },
+    }
+  );
 }
 
 const loadingPerson = {
@@ -25,4 +37,4 @@ function usePerson(id) {
   return data || loadingPerson;
 }
 
-export { usePeople, useCreatePerson, usePerson };
+export { usePeople, useCreatePerson, useDeletePerson, usePerson };

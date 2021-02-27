@@ -1,27 +1,24 @@
 import "twin.macro";
-import Head from "next/head";
-import Link from "next/link";
-import { PersonForm } from "../components/lib";
-import { usePeople } from "../utils/people";
+import {
+  PersonForm,
+  Layout,
+  PageInfo,
+  PeopleCount,
+  PersonList,
+} from "../components/lib";
 
 export default function Home() {
-  const people = usePeople();
   return (
-    <div>
-      <Head>
-        <title>React Query Demo</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <Layout>
+      <PageInfo title="Home | Demo" />
 
-      <main tw="m-4">
-        {people &&
-          people.map((person) => (
-            <Link key={person._id} href={`/person/${person._id}`}>
-              <a>{person.name}</a>
-            </Link>
-          ))}
-        <PersonForm />
+      <main>
+        <PeopleCount />
+        <div tw="grid grid-cols-2 gap-4">
+          <PersonForm />
+          <PersonList />
+        </div>
       </main>
-    </div>
+    </Layout>
   );
 }

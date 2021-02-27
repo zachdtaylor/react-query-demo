@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { GlobalStyles } from "twin.macro";
-import "../styles/globals.css";
 
 const queryClient = new QueryClient();
 
