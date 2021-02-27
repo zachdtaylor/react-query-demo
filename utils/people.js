@@ -1,3 +1,4 @@
+import React from "react";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { client } from "./api-client";
 
@@ -39,4 +40,21 @@ function usePerson(id) {
   });
 }
 
-export { usePeople, useCreatePerson, useDeletePerson, usePerson };
+function usePersonForm() {
+  const initialState = {
+    name: "",
+    phoneNumber: "",
+  };
+  return React.useReducer(
+    (o, n) => (n ? { ...o, ...n } : initialState),
+    initialState
+  );
+}
+
+export {
+  usePeople,
+  useCreatePerson,
+  useDeletePerson,
+  usePerson,
+  usePersonForm,
+};

@@ -1,5 +1,5 @@
 import React from "react";
-import { useCreatePerson, usePeople } from "../utils/people";
+import { useCreatePerson, usePeople, usePersonForm } from "../utils/people";
 import "twin.macro";
 import Link from "next/link";
 import Head from "next/head";
@@ -8,17 +8,6 @@ import { FaSpinner } from "react-icons/fa";
 const Spinner = ({ className }) => (
   <FaSpinner className={`animate-spin ${className}`} />
 );
-
-function usePersonForm() {
-  const initialState = {
-    name: "",
-    phoneNumber: "",
-  };
-  return React.useReducer(
-    (o, n) => (n ? { ...o, ...n } : initialState),
-    initialState
-  );
-}
 
 const PageInfo = ({ title }) => (
   <Head>
@@ -110,7 +99,9 @@ const PersonList = () => {
       {people.isSuccess &&
         people.data.map((person) => (
           <Link key={person._id} href={`/person/${person._id}`}>
-            <a tw="cursor-pointer">{person.name}</a>
+            <a tw="grid items-center justify-items-center cursor-pointer">
+              {person.name}
+            </a>
           </Link>
         ))}
     </div>
