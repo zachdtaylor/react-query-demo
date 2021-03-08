@@ -20,7 +20,7 @@ function Input(props) {
   return (
     <input
       type="text"
-      tw="border-2 border-gray-500 rounded-md mx-2"
+      tw="border-2 border-gray-500 rounded-md mx-2 px-2 py-1 focus:(outline-none)"
       {...props}
     />
   );
@@ -30,12 +30,36 @@ const Layout = ({ children }) => (
   <div tw="m-4">
     <div tw="my-4 ml-2 pb-2 border-b-2">
       <Link href="/">
-        <a>Home</a>
+        <a tw="mx-4 cursor-pointer">Home</a>
+      </Link>
+      <Link href="/register">
+        <a tw="mx-4 cursor-pointer">Register Form</a>
       </Link>
     </div>
     <div tw="mx-2 my-6">{children}</div>
   </div>
 );
+
+const FormItem = ({ htmlFor, label, children }) => {
+  return (
+    <div tw="mb-4">
+      <label htmlFor={htmlFor}>{label}</label>
+      {children}
+    </div>
+  );
+};
+
+const SubmitButton = ({ children, ...props }) => {
+  return (
+    <button
+      type="submit"
+      tw="px-4 py-2 rounded-md bg-gray-800 text-white cursor-pointer"
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
 
 function PersonForm() {
   const [personForm, setPersonForm] = usePersonForm();
@@ -56,29 +80,23 @@ function PersonForm() {
 
   return (
     <form onSubmit={handleSubmit}>
-      <div tw="mb-4">
-        <label htmlFor="name">Name</label>
+      <FormItem label="Name" htmlFor="name">
         <Input
           name="name"
           value={personForm.name}
           onChange={(e) => setPersonForm({ name: e.target.value })}
         />
-      </div>
-      <div tw="my-4">
-        <label htmlFor="phoneNumber">Phone Number</label>
+      </FormItem>
+      <FormItem label="Phone Number" htmlFor="phoneNumber">
         <Input
           name="phoneNumber"
           value={personForm.phoneNumber}
           onChange={(e) => setPersonForm({ phoneNumber: e.target.value })}
         />
-      </div>
-      <button
-        type="submit"
-        tw="px-4 py-2 rounded-md bg-gray-800 text-white cursor-pointer"
-        disabled={!formIsValid()}
-      >
+      </FormItem>
+      <SubmitButton disabled={!formIsValid()}>
         {createPerson.isLoading ? <Spinner /> : "Create Person"}
-      </button>
+      </SubmitButton>
     </form>
   );
 }
@@ -108,4 +126,14 @@ const PersonList = () => {
   );
 };
 
-export { PersonForm, Layout, PageInfo, PeopleCount, PersonList, Spinner };
+export {
+  PersonForm,
+  Layout,
+  PageInfo,
+  PeopleCount,
+  PersonList,
+  Spinner,
+  FormItem,
+  Input,
+  SubmitButton,
+};
