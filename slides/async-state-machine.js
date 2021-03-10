@@ -18,17 +18,17 @@ const exec = (state, effects) =>
 const asyncReducer = (state, event) =>
   transition(state, event, {
     IDLE: {
-      LOAD: () => ({ state: "LOADING" }),
+      LOAD: (context) => ({ state: "LOADING", context }),
     },
     LOADING: {
       ASYNC_SUCCESS: ({ data }) => ({ state: "SUCCESS", data }),
       ASYNC_ERROR: ({ error }) => ({ state: "ERROR", error }),
     },
     SUCCESS: {
-      LOAD: () => ({ state: "LOADING" }),
+      LOAD: (context) => ({ state: "LOADING", context }),
     },
     ERROR: {
-      LOAD: () => ({ state: "LOADING" }),
+      LOAD: (context) => ({ state: "LOADING", context }),
     },
   });
 
@@ -42,8 +42,8 @@ const useAsync = (fn) => {
 
   React.useEffect(() => {
     exec(async, {
-      LOADING: () =>
-        fn()
+      LOADING: (state) =>
+        fn(state)
           .then((data) => dispatch({ type: "ASYNC_SUCCESS", data }))
           .catch((error) => dispatch({ type: "ASYNC_ERROR", error })),
     });

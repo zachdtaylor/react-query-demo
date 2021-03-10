@@ -53,7 +53,7 @@ const SubmitButton = ({ children, ...props }) => {
   return (
     <button
       type="submit"
-      tw="px-4 py-2 rounded-md bg-gray-800 text-white cursor-pointer"
+      tw="px-4 py-2 rounded-md bg-gray-800 text-white cursor-pointer focus:(outline-none)"
       {...props}
     >
       {children}
