@@ -61,13 +61,16 @@ export const SubmitButton = ({ children, ...props }) => {
   );
 };
 
-export const PersonForm = () => {
+export const PersonForm = ({ fetchPeople }) => {
   const [personForm, setPersonForm] = usePersonForm();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (personForm.isValid()) {
-      client("/api/people", { data: personForm }).then(() => setPersonForm());
+      client("/api/people", { data: personForm }).then(() => {
+        setPersonForm();
+        fetchPeople();
+      });
     }
   };
 
@@ -96,19 +99,7 @@ export const PeopleCount = () => {
   return <div tw="my-4">There are ? people</div>;
 };
 
-export const PersonList = () => {
-  const [people, setPeople] = React.useState(
-    range(5).map((_id) => ({ _id, name: "Loading..." }))
-  );
-
-  React.useEffect(() => {
-    const fetchPeople = async () => {
-      const data = await client("/api/people");
-      setPeople(data);
-    };
-    fetchPeople();
-  }, []);
-
+export const PersonList = ({ people }) => {
   return (
     <div tw="grid grid-flow-row grid-cols-5 gap-4">
       {people &&
