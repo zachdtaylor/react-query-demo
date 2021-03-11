@@ -1,22 +1,22 @@
 import React from "react";
-import { useCreatePerson, usePeople, usePersonForm } from "../utils/people";
+import { usePersonForm } from "../utils/people";
 import "twin.macro";
 import Link from "next/link";
 import Head from "next/head";
 import { FaSpinner } from "react-icons/fa";
+import { client } from "../utils/api-client";
+import { range } from "../utils/misc";
 
-const Spinner = ({ className }) => (
-  <FaSpinner className={`animate-spin ${className}`} />
-);
+export const Spinner = () => <FaSpinner tw="animate-spin" />;
 
-const PageInfo = ({ title }) => (
+export const PageInfo = ({ title }) => (
   <Head>
     <title>{title}</title>
     <link rel="icon" href="/favicon.ico" />
   </Head>
 );
 
-function Input(props) {
+export const Input = (props) => {
   return (
     <input
       type="text"
@@ -24,9 +24,9 @@ function Input(props) {
       {...props}
     />
   );
-}
+};
 
-const Layout = ({ children }) => (
+export const Layout = ({ children }) => (
   <div tw="m-4">
     <div tw="my-4 ml-2 pb-2 border-b-2">
       <Link href="/">
@@ -40,7 +40,7 @@ const Layout = ({ children }) => (
   </div>
 );
 
-const FormItem = ({ htmlFor, label, children }) => {
+export const FormItem = ({ htmlFor, label, children }) => {
   return (
     <div tw="mb-4">
       <label htmlFor={htmlFor}>{label}</label>
@@ -49,7 +49,7 @@ const FormItem = ({ htmlFor, label, children }) => {
   );
 };
 
-const SubmitButton = ({ children, ...props }) => {
+export const SubmitButton = ({ children, ...props }) => {
   return (
     <button
       type="submit"
@@ -61,21 +61,14 @@ const SubmitButton = ({ children, ...props }) => {
   );
 };
 
-function PersonForm() {
+export const PersonForm = () => {
   const [personForm, setPersonForm] = usePersonForm();
-  const createPerson = useCreatePerson();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createPerson.mutate(personForm, {
-      onSuccess: () => {
-        setPersonForm();
-      },
-    });
-  };
-
-  const formIsValid = () => {
-    return personForm.name !== "" && personForm.phoneNumber !== "";
+    if (personForm.isValid()) {
+      client("/api/people", { data: personForm }).then(() => setPersonForm());
+    }
   };
 
   return (
@@ -94,28 +87,32 @@ function PersonForm() {
           onChange={(e) => setPersonForm({ phoneNumber: e.target.value })}
         />
       </FormItem>
-      <SubmitButton disabled={!formIsValid()}>
-        {createPerson.isLoading ? <Spinner /> : "Create Person"}
-      </SubmitButton>
+      <SubmitButton>Create Person</SubmitButton>
     </form>
-  );
-}
-
-const PeopleCount = () => {
-  const people = usePeople();
-  return (
-    <div tw="my-4">
-      There are {people.isLoading ? "?" : people.data.length} people
-    </div>
   );
 };
 
-const PersonList = () => {
-  const people = usePeople();
+export const PeopleCount = () => {
+  return <div tw="my-4">There are ? people</div>;
+};
+
+export const PersonList = () => {
+  const [people, setPeople] = React.useState(
+    range(5).map((_id) => ({ _id, name: "Loading..." }))
+  );
+
+  React.useEffect(() => {
+    const fetchPeople = async () => {
+      const data = await client("/api/people");
+      setPeople(data);
+    };
+    fetchPeople();
+  }, []);
+
   return (
     <div tw="grid grid-flow-row grid-cols-5 gap-4">
-      {people.isSuccess &&
-        people.data.map((person) => (
+      {people &&
+        people.map((person) => (
           <Link key={person._id} href={`/person/${person._id}`}>
             <a tw="grid items-center justify-items-center cursor-pointer">
               {person.name}
@@ -124,16 +121,4 @@ const PersonList = () => {
         ))}
     </div>
   );
-};
-
-export {
-  PersonForm,
-  Layout,
-  PageInfo,
-  PeopleCount,
-  PersonList,
-  Spinner,
-  FormItem,
-  Input,
-  SubmitButton,
 };

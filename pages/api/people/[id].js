@@ -1,5 +1,6 @@
 import { connectToDB } from "../../../utils/db";
 import { ObjectID } from "mongodb";
+import { sleep } from "../../../utils/misc";
 
 export default async function handler(req, res) {
   const {
@@ -7,6 +8,7 @@ export default async function handler(req, res) {
     method,
   } = req;
   const db = await connectToDB();
+  await sleep(300);
   switch (method) {
     case "DELETE":
       await db.collection("people").deleteOne({ _id: ObjectID(id) });

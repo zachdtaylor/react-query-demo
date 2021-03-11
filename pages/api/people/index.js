@@ -1,9 +1,10 @@
 import { connectToDB } from "../../../utils/db";
+import { sleep } from "../../../utils/misc";
 
 export default async function handler(req, res) {
   const { method } = req;
   const db = await connectToDB();
-
+  await sleep(400);
   switch (method) {
     case "POST":
       await db.collection("people").insertOne(req.body);
