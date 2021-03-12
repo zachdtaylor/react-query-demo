@@ -5,7 +5,6 @@ import Link from "next/link";
 import Head from "next/head";
 import { FaSpinner } from "react-icons/fa";
 import { client } from "../utils/api-client";
-import { range } from "../utils/misc";
 
 export const Spinner = () => <FaSpinner tw="animate-spin" />;
 
