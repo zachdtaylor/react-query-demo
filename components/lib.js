@@ -95,8 +95,8 @@ export const PersonForm = ({ fetchPeople }) => {
   );
 };
 
-export const PeopleCount = () => {
-  return <div tw="my-4">There are ? people</div>;
+export const PeopleCount = ({ people }) => {
+  return <div tw="my-4">There are {people.length} people</div>;
 };
 
 export const PersonList = ({ people }) => {

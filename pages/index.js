@@ -1,6 +1,12 @@
 import React from "react";
 import "twin.macro";
-import { PersonForm, Layout, PageInfo, PersonList } from "../components/lib";
+import {
+  PersonForm,
+  Layout,
+  PageInfo,
+  PersonList,
+  PeopleCount,
+} from "../components/lib";
 import { client } from "../utils/api-client";
 import { range } from "../utils/misc";
 
@@ -23,6 +29,7 @@ export default function Home() {
       <PageInfo title="Home | Demo" />
 
       <main>
+        <PeopleCount people={people} />
         <div tw="grid grid-cols-2 gap-4">
           <PersonForm fetchPeople={fetchPeople} />
           <PersonList people={people} />
