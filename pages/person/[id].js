@@ -14,7 +14,9 @@ export default function Person() {
 
   React.useEffect(() => {
     const fetchPerson = async () => {
-      client(`/api/people/${id}`).then((data) => setPerson(data));
+      client(`/api/people/${id}`)
+        .then((data) => setPerson(data))
+        .catch((error) => console.log(error));
     };
     fetchPerson();
   }, [id]);
