@@ -1,6 +1,6 @@
 import axios from "axios";
 
-async function client(endpoint, { data, ...customConfig } = {}) {
+export const client = async (endpoint, { data, ...customConfig } = {}) => {
   const config = {
     method: data ? "POST" : "GET",
     baseURL: "http://localhost:3000",
@@ -13,6 +13,4 @@ async function client(endpoint, { data, ...customConfig } = {}) {
   };
   const response = await axios(config);
   return response.data;
-}
-
-export { client };
+};

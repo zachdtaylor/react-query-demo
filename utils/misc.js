@@ -1,7 +1,7 @@
-export function sleep(ms) {
+export const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
+};
 
-export function range(length) {
+export const range = (length) => {
   return Array.from(Array(length).keys());
-}
+};

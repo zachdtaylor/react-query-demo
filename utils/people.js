@@ -1,6 +1,6 @@
 import React from "react";
 
-export function usePersonForm() {
+export const usePersonForm = () => {
   const initialState = {
     name: "",
     phoneNumber: "",
@@ -12,4 +12,4 @@ export function usePersonForm() {
     (o, n) => (n ? { ...o, ...n } : initialState),
     initialState
   );
-}
+};
