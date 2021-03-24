@@ -1,5 +1,5 @@
 import { Layout, PageInfo } from "../components/lib";
-import { RegisterForm } from "../components/register-form";
+import { RegisterForm } from "../components/register-form-hooks";
 import "twin.macro";
 
 export default function Register() {

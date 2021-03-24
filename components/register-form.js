@@ -1,10 +1,30 @@
 import React from "react";
 import { FormItem, Input, SubmitButton } from "./lib";
 
-const RegisterForm = () => {
+const useRegisterForm = () => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
+
+  return {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+  };
+};
+
+const RegisterForm = () => {
+  const {
+    email,
+    setEmail,
+    password,
+    setPassword,
+    confirmPassword,
+    setConfirmPassword,
+  } = useRegisterForm();
 
   const handleSubmit = (event) => {
     event.preventDefault();
