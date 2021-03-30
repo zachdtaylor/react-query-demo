@@ -14,10 +14,16 @@ export default function Home() {
   const [people, setPeople] = React.useState(
     range(5).map((_id) => ({ _id, name: "Loading..." }))
   );
+  const [error, setError] = React.useState(null);
 
   const fetchPeople = async () => {
-    const data = await client("/api/people");
-    setPeople(data);
+    try {
+      const data = await client("/api/people");
+      setPeople(data);
+      setError(null);
+    } catch (error) {
+      setError(error);
+    }
   };
 
   React.useEffect(() => {
@@ -29,10 +35,10 @@ export default function Home() {
       <PageInfo title="Home | Demo" />
 
       <main>
-        <PeopleCount people={people} />
+        <PeopleCount people={people} error={error} />
         <div tw="grid grid-cols-2 gap-4">
           <PersonForm fetchPeople={fetchPeople} />
-          <PersonList people={people} />
+          <PersonList people={people} error={error} />
         </div>
       </main>
     </Layout>
