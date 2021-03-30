@@ -1,30 +1,15 @@
 import React from "react";
 import { FormItem, Input, SubmitButton } from "./lib";
 
-const useRegisterForm = () => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
-
-  return {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    confirmPassword,
-    setConfirmPassword,
-  };
-};
-
 const RegisterForm = () => {
-  const {
-    email,
-    setEmail,
-    password,
-    setPassword,
-    confirmPassword,
-    setConfirmPassword,
-  } = useRegisterForm();
+  const [form, setForm] = React.useReducer(
+    (state, update) => ({ ...state, ...update }),
+    {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    }
+  );
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -36,24 +21,24 @@ const RegisterForm = () => {
       <FormItem htmlFor="email" label="Email">
         <Input
           name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={form.email}
+          onChange={(e) => setForm({ email: e.target.value })}
         />
       </FormItem>
       <FormItem htmlFor="password" label="Password">
         <Input
           name="password"
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={form.password}
+          onChange={(e) => setForm({ password: e.target.value })}
         />
       </FormItem>
       <FormItem htmlFor="confirmPassword" label="Confirm Password">
         <Input
           name="confirmPassword"
           type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          value={form.confirmPassword}
+          onChange={(e) => setForm({ confirmPassword: e.target.value })}
         />
       </FormItem>
       <SubmitButton type="submit">Submit</SubmitButton>
