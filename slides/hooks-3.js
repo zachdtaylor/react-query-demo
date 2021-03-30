@@ -20,12 +20,7 @@ const useAsync = () => {
     );
   }, []);
 
-  return {
-    state,
-    data,
-    error,
-    run,
-  };
+  return { state, data, error, run };
 };
 
 const usePDF = (pdfContents) => {
