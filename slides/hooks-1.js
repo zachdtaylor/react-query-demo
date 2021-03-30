@@ -6,36 +6,19 @@ const generatePDF = async (contents) => {
   // Returns a promise
 };
 
-const useAsync = () => {
-  const [{ state, data, error }, dispatch] = React.useReducer(
+const PDF = ({ pdfContents }) => {
+  const [pdf, dispatch] = React.useReducer(
     (prevState, newState) => ({ ...prevState, ...newState }),
     { state: "idle", data: null, error: null }
   );
 
-  const run = (promise) =>
-    React.useCallback(() => {
-      dispatch({ state: "loading" });
-      promise.then(
-        (data) => dispatch({ data, state: "resolved" }),
-        (error) => dispatch({ error, state: "rejected" })
-      );
-    }, []);
-
-  return { state, data, error, run };
-};
-
-const usePDF = (pdfContents) => {
-  const { run, ...pdf } = useAsync();
-
   React.useEffect(() => {
-    run(generatePDF(pdfContents));
-  }, [pdfContents, run]);
-
-  return pdf;
-};
-
-const PDF = ({ pdfContents }) => {
-  const pdf = usePDF(pdfContents);
+    dispatch({ state: "loading" });
+    generatePDF(pdfContents).then(
+      (data) => dispatch({ data, state: "resolved" }),
+      (error) => dispatch({ error, state: "rejected" })
+    );
+  });
 
   if (pdf.state === "loading") {
     return <Spinner />;
