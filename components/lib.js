@@ -8,6 +8,8 @@ import { client } from "../utils/api-client";
 
 export const Spinner = () => <FaSpinner tw="animate-spin" />;
 
+export const Error = ({ children }) => <p tw="text-red-500 py-2">{children}</p>;
+
 export const PageInfo = ({ title }) => (
   <Head>
     <title>{title}</title>
@@ -62,14 +64,24 @@ export const SubmitButton = ({ children, ...props }) => {
 
 export const PersonForm = ({ fetchPeople }) => {
   const [personForm, setPersonForm] = usePersonForm();
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (personForm.isValid()) {
-      client("/api/people", { data: personForm }).then(() => {
-        setPersonForm();
-        fetchPeople();
-      });
+      setLoading(true);
+      setError(null);
+      client("/api/people", { data: personForm })
+        .then(() => {
+          setLoading(false);
+          setPersonForm();
+          fetchPeople();
+        })
+        .catch((error) => {
+          setLoading(false);
+          setError(error);
+        });
     }
   };
 
@@ -89,16 +101,29 @@ export const PersonForm = ({ fetchPeople }) => {
           onChange={(e) => setPersonForm({ phoneNumber: e.target.value })}
         />
       </FormItem>
-      <SubmitButton>Create Person</SubmitButton>
+      <SubmitButton>{loading ? <Spinner /> : "Create Person"}</SubmitButton>
+      {error && <Error>{error.message}</Error>}
     </form>
   );
 };
 
-export const PeopleCount = ({ people }) => {
-  return <div tw="my-4">There are {people.length} people</div>;
+export const PeopleCount = ({ people, error }) => {
+  return (
+    <div tw="my-4">
+      {error ? (
+        <Error>{error.message}</Error>
+      ) : (
+        `There are ${people.length} people`
+      )}
+    </div>
+  );
 };
 
-export const PersonList = ({ people }) => {
+export const PersonList = ({ people, error }) => {
+  if (error) {
+    return <Error>{error.message}</Error>;
+  }
+
   return (
     <div tw="grid grid-flow-row grid-cols-5 gap-4">
       {people &&
