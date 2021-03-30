@@ -31,9 +31,6 @@ export const Layout = ({ children }) => (
       <Link href="/">
         <a tw="mx-4 cursor-pointer">Home</a>
       </Link>
-      <Link href="/register">
-        <a tw="mx-4 cursor-pointer">Register Form</a>
-      </Link>
     </div>
     <div tw="mx-2 my-6">{children}</div>
   </div>
