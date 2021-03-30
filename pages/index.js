@@ -17,13 +17,12 @@ export default function Home() {
   const [error, setError] = React.useState(null);
 
   const fetchPeople = async () => {
-    try {
-      const data = await client("/api/people");
-      setPeople(data);
-      setError(null);
-    } catch (error) {
-      setError(error);
-    }
+    client("/api/people")
+      .then((data) => {
+        setPeople(data);
+        setError(null);
+      })
+      .catch((error) => setError(error));
   };
 
   React.useEffect(() => {
