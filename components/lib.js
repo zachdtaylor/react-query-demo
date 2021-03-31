@@ -1,10 +1,11 @@
 import React from "react";
-import { usePersonForm } from "../utils/people";
+import { useCreatePerson, usePepole, usePersonForm } from "../utils/people";
 import "twin.macro";
 import Link from "next/link";
 import Head from "next/head";
 import { FaSpinner } from "react-icons/fa";
 import { client } from "../utils/api-client";
+import { useMutation } from "react-query";
 
 export const Spinner = () => <FaSpinner tw="animate-spin" />;
 
@@ -59,26 +60,21 @@ export const SubmitButton = ({ children, ...props }) => {
   );
 };
 
-export const PersonForm = ({ fetchPeople }) => {
+export const PersonForm = () => {
+  const createPerson = useCreatePerson();
   const [personForm, setPersonForm] = usePersonForm();
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (personForm.isValid()) {
-      setLoading(true);
-      setError(null);
-      client("/api/people", { data: personForm })
-        .then(() => {
-          setLoading(false);
-          setPersonForm();
-          fetchPeople();
-        })
-        .catch((error) => {
-          setLoading(false);
-          setError(error);
-        });
+      createPerson.mutate(
+        { data: personForm },
+        {
+          onSuccess: () => {
+            setPersonForm();
+          },
+        }
+      );
     }
   };
 
@@ -98,33 +94,37 @@ export const PersonForm = ({ fetchPeople }) => {
           onChange={(e) => setPersonForm({ phoneNumber: e.target.value })}
         />
       </FormItem>
-      <SubmitButton>{loading ? <Spinner /> : "Create Person"}</SubmitButton>
-      {error && <Error>{error.message}</Error>}
+      <SubmitButton>
+        {createPerson.isLoading ? <Spinner /> : "Create Person"}
+      </SubmitButton>
+      {createPerson.isError && <Error>{createPerson.error.message}</Error>}
     </form>
   );
 };
 
-export const PeopleCount = ({ people, error }) => {
+export const PeopleCount = () => {
+  const people = usePepole();
   return (
     <div tw="my-4">
-      {error ? (
-        <Error>{error.message}</Error>
+      {people.isError ? (
+        <Error>{people.error.message}</Error>
       ) : (
-        `There are ${people.length} people`
+        `There are ${people.data.length} people`
       )}
     </div>
   );
 };
 
-export const PersonList = ({ people, error }) => {
-  if (error) {
-    return <Error>{error.message}</Error>;
+export const PersonList = () => {
+  const people = usePepole();
+  if (people.isError) {
+    return <Error>{people.error.message}</Error>;
   }
 
   return (
     <div tw="grid grid-flow-row grid-cols-5 gap-4">
-      {people &&
-        people.map((person) => (
+      {people.data &&
+        people.data.map((person) => (
           <Link key={person._id} href={`/person/${person._id}`}>
             <a tw="grid items-center justify-items-center cursor-pointer">
               {person.name}
