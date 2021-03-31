@@ -18,7 +18,7 @@ const PDF = ({ pdfContents }) => {
       (data) => dispatch({ data, state: "resolved" }),
       (error) => dispatch({ error, state: "rejected" })
     );
-  });
+  }, [pdfContents]);
 
   if (pdf.state === "loading") {
     return <Spinner />;
