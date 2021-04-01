@@ -1,5 +1,3 @@
-- Show usePeople hook.
-- Show second use of usePeople, talk about deduping requests
+## React Query Demo
 
-- What stale means
-- Garbage cleanup
+Demo from my presentation on custom hooks and react query for React Chicago 03/31/2021
