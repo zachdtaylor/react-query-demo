@@ -1,6 +1,6 @@
 ## React Query Demo
 
-Demo from my presentation on custom hooks and react query for React Chicago 03/31/2021.
+Demo from my presentation on custom hooks and react query for React Chicago 03/31/2021. You can watch the talk [here](https://youtu.be/Ge_kMRt1bBI?si=D-FJQTrUrw8Zf9Ov).
 
 The code before `react-query` is on the `demo-before` branch, and the code after `react-query` is on the `demo-after` branch.
 
